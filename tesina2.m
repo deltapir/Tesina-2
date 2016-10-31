@@ -52,6 +52,9 @@ for i=1:length(csia)
 end
 figure(1)
 plot(csi,Tv,csi,Tl,csia,t1)
+title('Temperatura - \xi')
+xlabel('\xi')
+ylabel('Temperatura [°C]')
 grid on
 
 [csi8, T8]=polyxpoly(csia,t1,csi,Tl);   %Interseca la retta (csia,t1) con la curva della miscela liquida (csi,Tl) per determinare la concentrazione del punto 8. 
@@ -65,7 +68,10 @@ for j=1:2;
         pl(i)=refpropm('p','t',t(j)+273.15,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar
     end
     figure(2)
+    title('Pressione - \xi')
     semilogy(csi, pl, csi, pv);
+    xlabel('\xi')
+    ylabel('Pressione [bar]')
     grid on
     hold on
 end
