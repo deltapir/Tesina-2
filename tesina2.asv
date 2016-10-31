@@ -35,6 +35,9 @@ csi=linspace(0,1);
         pv(i)=refpropm('p','t',Tge+273.15,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar Calcola la pressione per la fase VAPORE a temperatura del GE
         pl(i)=refpropm('p','t',Tco+273.15,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar Calcola la pressione per la fase LIQUIDA a temperatura del CO
     end
+semilogy(csi, pl, csi, pv)
+grid on
+hold on
 [csiv,p1]=polyxpoly(csi, pl, csi, pv)
         if csiv(2)>0.9
             csi1=csiv(2);
@@ -44,14 +47,8 @@ csi=linspace(0,1);
 t=[Tge Tco];
 for j=1:2;
     for i=1:length(csi);
-        pv(i)=refpropm('p','t',t(j)+273.15,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar
-        pl(i)=refpropm('p','t',t(j)+273.15,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar
+        pv(i)=refpropm('p','t',t(j)+273.15,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar Calcola la pressione per la fase VAPORE a temperatura del GE
+        pl(i)=refpropm('p','t',Tco+273.15,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar Calcola la pressione per la fase LIQUIDA a temperatura del CO
     end
-    semilogy(csi, pl, csi, pv)
-    grid on
-    hold on
-end
-
-
 
 
