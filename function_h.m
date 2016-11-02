@@ -1,10 +1,10 @@
 function h =function_h(Tev,Pass,x1,ref,ass)
 
-x=0:0.02:1; 	%concentrazione
+x=0:0.05:1; 	%concentrazione
 
 for i=1:length(x)
-    [Tl(i) HL(i)]=refpropm('TH','P',Pass*100,'Q',0,ref,ass,[x(i) 1-x(i)]);
-    [Tv(i) HV(i)]=refpropm('TH','P',Pass*100,'Q',1,ref,ass,[x(i) 1-x(i)]);
+    [Tl(i) HL(i)]=refpropm('TH','P',Pass,'Q',0,ref,ass,[x(i) 1-x(i)]);
+    [Tv(i) HV(i)]=refpropm('TH','P',Pass,'Q',1,ref,ass,[x(i) 1-x(i)]);
 end
 
 xl=interp1(Tl,x,Tev);		%interpola la curva Tl,x per ottenere i valori di xl nei punti Tev.
