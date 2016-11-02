@@ -33,7 +33,7 @@ csi=linspace(0,1);
             p1=pv(2);
         end
 h1=refpropm('h','t',Tge+273.15,'q',1,'ammonia','water',[csi1 1-csi1])/1000;
-h2=refpropm('h','t',Tco+273.15,'q',1,'ammonia','water',[csi1 1-csi1])/1000;
+h2=refpropm('h','t',Tco+273.15,'q',0,'ammonia','water',[csi1 1-csi1])/1000;
 
 %% determino il punto 8
 % faccio una semplice intersezione tra la curva e l'isoterma
@@ -120,24 +120,24 @@ for i=1:length(p3var);
         %calcolo h4 usando la regola della leva. Nel grafico h-csi interseco
         %l'isoterma con le curve di saturazione della miscela alla pressione
         %p3var(i). Ottengo un vettore di h4(i).
-%         h4v(j)=refpropm('h','p',p3var(i)*100,'q',1,'ammonia','water',[csi(j) 1-csi(j)])/1000; %h4 vapore
-%         h4l(j)=refpropm('h','p',p3var(i)*100,'q',0,'ammonia','water',[csi(j) 1-csi(j)])/1000; %h4 vapore
-        %disegno le curve di saturazione nel grafico T-csi
-%         T4v(j)=refpropm('t','p',p3var(i)*100,'q',1,'ammonia','water',[csi(j) 1-csi(j)])-273.15;
-%         T4l(j)=refpropm('t','p',p3var(i)*100,'q',0,'ammonia','water',[csi(j) 1-csi(j)])-273.15;
-%         Tv(j)=Tev;
-        %h4isoT(i)=refpropm('h','t',Tev+273.15,'p',p3var(i)*100,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+        h4v(j)=refpropm('h','p',p3var(i)*100,'q',1,'ammonia','water',[csi(j) 1-csi(j)])/1000; %h4 vapore
+        h4l(j)=refpropm('h','p',p3var(i)*100,'q',0,'ammonia','water',[csi(j) 1-csi(j)])/1000; %h4 vapore
+%         disegno le curve di saturazione nel grafico T-csi
+        T4v(j)=refpropm('t','p',p3var(i)*100,'q',1,'ammonia','water',[csi(j) 1-csi(j)])-273.15;
+        T4l(j)=refpropm('t','p',p3var(i)*100,'q',0,'ammonia','water',[csi(j) 1-csi(j)])-273.15;
+        Tv(j)=Tev;
+        h4isoT(i)=refpropm('h','t',Tev+273.15,'p',p3var(i)*100,'ammonia','water',[csi(i) 1-csi(i)])/1000;
     end
     %interseco le curve del liquido nel grafico h-csi con l'isoterma al
     %variare della pressione.
-%     [csili4 Tev]=polyxpoly(csi,T4l,csi,Tv);
-% %     interseco le curve del vapore nel grafico h-csi con l'isoterma al
-% %     variare della pressione.
-%     [csiva4 Tev]=polyxpoly(csi,T4v,csi,Tv);
-%     h4li=refpropm('h','p',p3var(i)*100,'q',0,'ammonia','water',[csili4 1-csili4])/1000;
-%     h4va=refpropm('h','p',p3var(i)*100,'q',1,'ammonia','water',[csiva4 1-csiva4])/1000;
-% 
-%     h4=h4li+(h4va-h4li)*(csi1-csili4)/(csiva4-csili4);
+    [csili4 Tev]=polyxpoly(csi,T4l,csi,Tv);
+%     interseco le curve del vapore nel grafico h-csi con l'isoterma al
+%     variare della pressione.
+    [csiva4 Tev]=polyxpoly(csi,T4v,csi,Tv);
+    h4li=refpropm('h','p',p3var(i)*100,'q',0,'ammonia','water',[csili4 1-csili4])/1000;
+    h4va=refpropm('h','p',p3var(i)*100,'q',1,'ammonia','water',[csiva4 1-csiva4])/1000;
+
+    h4=h4li+(h4va-h4li)*(csi1-csili4)/(csiva4-csili4);
     
     [csi5(i), y(i)]=polyxpoly(csi,T5retta,csi,T5var);
     %calcolo h4 che sarà variabile
