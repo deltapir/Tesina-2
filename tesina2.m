@@ -92,7 +92,7 @@ grid on
 
 p3min=refpropm('p','t',Tass+273.15,'q',0,'ammonia','water',[csi8 1-csi8])/100;  %bar
 
-p3var=linspace(p3min, p3max);   %range ammesso all'evaporatore
+p3var=linspace(p3min, p3max,20);   %range ammesso all'evaporatore
 
 % for i=1:length(p3var);
 %     h4(i)=refpropm('h','t',Tass+273.15,'p',p3var(i)*100,'ammonia','water',[csi1 1-csi1])/1000;
@@ -142,13 +142,13 @@ for i=1:length(p3var);
     [csi5(i) y(i)]=polyxpoly(csi,T5retta,csi,T5var);
     %calcolo h4 che sarà variabile
 %     h4(i)=refpropm('h','t',Tev+273.15,'p',p3var(i)*100,'ammonia','water',[csi1 1-csi1])/1000;
-    h4(i)=function_h(Tev,p3var(i),csi1,ref,ass);
+    h4(i)=function_h(Tev+273.15,p3var(i)*100,csi1,ref,ass)/1000;
     %mi calcolo h5 che sarà variabile
     h5(i)=refpropm('h','t',Tass+273.15,'p',p3var(i)*100,'ammonia','water',[csi5(i) 1-csi5(i)])/1000;
     %calcolo f
     f(i)=(csi1-csi8)/(csi5(i)-csi8);
     %CALCOLO COOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP!
-    COPvar(i)=(h4(i)-h8)/(h1-h8+f(i)*(h8-h5(i)));
+    COPvar(i)=((h4(i)-h2)/(h1-h8+f(i)*(h8-h5(i))));
 %     plot(csi,T5var);
 %     hold on
 end
