@@ -1,6 +1,6 @@
 function h =function_h(Tev,Pass,x1,ref,ass)
 
-x=0:0.01:1; 	%concentrazione
+x=0:0.02:1; 	%concentrazione
 
 for i=1:length(x)
     [Tl(i) HL(i)]=refpropm('TH','P',Pass*100,'Q',0,ref,ass,[x(i) 1-x(i)]);
