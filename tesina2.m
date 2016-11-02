@@ -147,8 +147,12 @@ for i=1:length(p3var);
     h5(i)=refpropm('h','t',Tass+273.15,'p',p3var(i)*100,'ammonia','water',[csi5(i) 1-csi5(i)])/1000;
     %calcolo f
     f(i)=(csi1-csi8)/(csi5(i)-csi8);
+    %calcolo hq alla temperatura del GV con la concentrazione ricca
+    hq(i)=refpropm('h','t',Tge+273.15,'p',p3var(i)*100,'ammonia','water',[csi8 1-csi8])/1000;
+    qGV(i)=f(i)*(hq(i)-h5(i));
     %CALCOLO COOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP!
-    COPvar(i)=((h4(i)-h2)/(h1-h8+f(i)*(h8-h5(i))));
+    COPvar(i)=(h4(i)-h2)/(qGV(i));
+    %COPvar(i)=((h4(i)-h2)/(h1-h8+f(i)*(h8-h5(i))));
 %     plot(csi,T5var);
 %     hold on
 end
