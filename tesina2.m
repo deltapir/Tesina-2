@@ -48,7 +48,7 @@ for i=1:length(csia)
 end
 
 [csi8, T8]=polyxpoly(csia,t1,csi,Tl);   %Interseca la retta (csia,t1) con la curva della miscela liquida (csi,Tl) per determinare la concentrazione del punto 8. 
-h8=refpropm('h','t',Tge+273.15,'q',1,'ammonia','water',[csi8 1-csi8])/1000;
+h8=refpropm('h','t',Tge+273.15,'q',0,'ammonia','water',[csi8 1-csi8])/1000;
 
 % %plotto il grafico      %QUESTA PARTE DEL PLOT PUO' ESSERE ELIMINATA AI
 % %FINI DEL CALCOLO
@@ -76,15 +76,14 @@ p3max=refpropm('p','t',Tev+273.15,'q',0,'ammonia','water',[csi1 1-csi1])/100;  %
 %Muovendomi a temperatura costante (quella a valle dell'assorbitore - punto
 %5) determino un range di pressione-concentrazione.
 
-%csi=linspace(0,1);
 for i=1:length(csi);
     p3min(i)=refpropm('p','t',Tass+273.15,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/100;  %bar
 end
-figure(3)
-plot(csi,p3min);
-xlabel('\xi');
-ylabel('Pressione [bar]');
-grid on
+% figure(3)
+% plot(csi,p3min);
+% xlabel('\xi');
+% ylabel('Pressione [bar]');
+% grid on
 
 % siccome la pressione corrispondente alla concentrazione csi1 è maggiore
 % di quella permessa dalla p3max, il range di pressione è limitata da p3max
@@ -92,7 +91,7 @@ grid on
 
 p3min=refpropm('p','t',Tass+273.15,'q',0,'ammonia','water',[csi8 1-csi8])/100;  %bar
 
-p3var=linspace(p3min, p3max,20);   %range ammesso all'evaporatore
+p3var=linspace(p3min, p3max,10);   %range ammesso all'evaporatore
 
 % posso quindi ora calcolarmi la portata che sarà ancora variabile in
 % quanto h4 varia con la pressione (anche se di pochissimo!).
@@ -154,10 +153,70 @@ for i=1:length(p3var);
 end
 %   calcolo il COP massimo
 [COP, p3]=max(COPvar);
+fR=f(p3);       %mi prendo il valore di ricircolo corrispondente al cop massimo R:reale
+p3=p3var(p3);   %determino il valore della p3 corrispondente al cop massimo
+csi5=(csi1-csi8)/fR+csi8;
 
-    
-    
-% %% PLOT GRAFICO csi-P
+%ricalcolo a questo punto le varie proprietà visto che ho ottenuto la
+%pressione all'evaporatore. R:reale
+h3R=h2;
+T3R=refpropm('t','h',h3R*1000,'p',p3*100,'ammonia','water',[csi1 1-csi1])-273.15;
+h3RL=refpropm('h','p',p3*100,'q',0,'ammonia','water',[csi1 1-csi1])/1000;
+h3RV=refpropm('h','p',p3*100,'q',1,'ammonia','water',[csi1 1-csi1])/1000;
+x3R=(h3R-h3RL)/(h3RV-h3RL);
+h4R=refpropm('h','t',Tev+273.15,'p',p3*100,'ammonia','water',[csi1 1-csi1])/1000;%i valori di saturazione al punto 4 coincidono con quelli del punto 3 quindi userò gli stessi
+x4R=(h4R-h3RL)/(h3RV-h3RL);
+m4=Qev/(h4R-h3R);   %kg/s
+h5R=refpropm('h','t',Tass+273.15,'p',p3*100,'ammonia','water',[csi5 1-csi5])/1000;
+m7=m4*(csi1-csi5)/(csi5-csi8);
+m5=m4+m7;
+h6R=h5R; %sii trascura l'incremento entalpico fornito dalla pompa
+T6R=refpropm('t','h',h6R*1000,'p',p1*100,'ammonia','water',[csi5 1-csi5])-273.15;
+
+%% DISEGNO GRAFICO
+for i=1:length(csi)
+    HVCO(i)=refpropm('h','p',p1*100,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+    HLCO(i)=refpropm('h','p',p1*100,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+    HVEV(i)=refpropm('h','p',p3*100,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+    HLEV(i)=refpropm('h','p',p3*100,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+end
+csiboh=0.97;
+% [liq vap]=refpropm('x','t',Tass+273.15,'q',1,'ammonia','water');
+hliq=refpropm('h','p',p3*100,'q',1,'ammonia','water',[csiboh 1-csiboh])/1000;
+figure(1)
+plot(csi,HVCO,'r',csi,HLCO,'r');
+text([0.5 0.5],[HVCO(length(csi)/2) HLCO(length(csi)/2)],'CO','color','red','Fontsize',14);
+hold on
+plot(csi,HVEV,'b',csi,HLEV,'b');
+text([0.25 0.25],[HVEV(length(csi)/4)-100 HLEV(length(csi)/4)],'EV','color','blue','Fontsize',14);
+hold on
+plot(csi1,h1,'ko');
+text(csi1+0.01,h1+50,'1','Fontsize',10);
+hold on
+plot(csi1,h2,'ko');
+text(csi1+0.01,h2+50,'2\equiv 3','Fontsize',10);
+hold on
+plot(csi1,h4R,'ko');
+text(csi1+0.01,h4R+50,'4','Fontsize',10);
+hold on
+plot(csi8,h8,'ko');
+text(csi8+0.01,h8+50,'7\equiv 8','Fontsize',10);
+hold on
+plot(csi5,h5R,'ko');
+text(csi5+0.01,h5R+50,'5\equiv 6','Fontsize',10);
+hold on
+plot([csi8 csi1],[h8 h1],'--r');
+text(0.6,1000,'Temp GV','Fontsize',8);
+hold on
+plot([csi5 csiboh],[h5R hliq],'--g');
+text(0.75,1000,'Temp ASS','Fontsize',8);
+grid on
+title('Schema');
+xlabel('\xi');
+ylabel('Entalpia [kJ/kg]');
+
+
+%% PLOT GRAFICO csi-P
 % t=[Tge Tco];
 % for j=1:2;
 %     for i=1:length(csi);
