@@ -152,8 +152,17 @@ for i=1:length(p3var);
 %     hold on
 end
 figure(2)           %plotto il grafico P-COP
-plot(p3var,COPvar);
-xlabel('P [bar]');
+plot(p3var,COPvar,'k');
+hold on
+plot([p3 1],[COP COP],'-.k');
+text(p3/2,COP+0.01,'COP massimo','horizontalalignment','center','fontweight','bold');
+hold on
+plot([p3var(1) p3var(1)],[COPvar(1) -0.1],'--k');
+text(p3var(1),-0.12,'Press MIN','color','black','horizontalalignment','center','fontweight','bold');
+hold on
+plot([p3var(end) p3var(end)],[COPvar(end) -0.1],'--k');
+text(p3var(end),-0.12,'Press MAX','color','black','horizontalalignment','center','fontweight','bold');
+xlabel('Pressione [bar]');
 ylabel('COP');
 title('Pressione - COP');
 grid on

@@ -152,8 +152,18 @@ for i=1:length(p3var);
 %     hold on
 end
 figure(2)           %plotto il grafico P-COP
-plot(p3var,COPvar);
-xlabel('P [bar]');
+plot(p3var,COPvar,'k');
+hold on
+plot([p3 p3],[COP -0.1],'-.k');
+text(p3,-0.11,'COP massimo','horizontalalignment','center','fontweight','bold');
+hold on
+plot([p3var(1) p3var(1)],[COPvar(1) -0.1],'--k');
+text(p3var(1),-0.12,'Press MIN','color','black','horizontalalignment','center','fontweight','bold');
+hold on
+plot([p3var(end) p3var(end)],[COPvar(end) -0.1],'--k');
+text(p3var(end),-0.12,'Press MAX','color','black','horizontalalignment','center','fontweight','bold');
+
+xlabel('p [bar]');
 ylabel('COP');
 title('Pressione - COP');
 grid on
@@ -230,25 +240,25 @@ plot(csi,HVEV,'b',csi,HLEV,'b','linewidth',1);
 text([0.25 0.25],[HVEV(length(csi)/4)-100 HLEV(length(csi)/4)],'EV','color','blue','Fontsize',14);
 hold on
 plot(csi1,h1,'ko');
-text(csi1+0.01,h1+50,'1','Fontsize',12);
+text(csi1+0.01,h1+50,'1','Fontsize',12,'fontWeight','bold');
 hold on
 plot(csi1,h2,'ko');
-text(csi1+0.01,h2+50,'2\equiv3','Fontsize',12);
+text(csi1+0.01,h2+50,'2\equiv3','Fontsize',12,'fontWeight','bold');
 hold on
 plot(csi1,h4R,'ko');
-text(csi1+0.01,h4R+50,'4','Fontsize',12);
+text(csi1+0.01,h4R+50,'4','Fontsize',12,'fontWeight','bold');
 hold on
 plot(csi8,h8,'ko');
-text(csi8+0.01,h8+50,'7\equiv8','Fontsize',12);
+text(csi8+0.01,h8+50,'7\equiv8','Fontsize',12,'fontWeight','bold');
 hold on
 plot(csi5,h5R,'ko');
-text(csi5+0.01,h5R+50,'5\equiv6','Fontsize',12);
+text(csi5+0.01,h5R+50,'5\equiv6','Fontsize',12,'fontWeight','bold');
 hold on
 plot(csi8,h8pR,'ko');
-text(csi8+0.01,h8pR+50,'8p','Fontsize',12);
+text(csi8+0.01,h8pR+50,'8p','Fontsize',12,'fontWeight','bold');
 hold on
 plot(csi5,h6pR,'ko');
-text(csi5+0.01,h6pR+50,'6p','Fontsize',12);
+text(csi5+0.01,h6pR+50,'6p','Fontsize',12,'fontWeight','bold');
 hold on
 plot(csiv,hev,'--b');
 text(0.9,1000,'Temp EV','Fontsize',9);
@@ -263,17 +273,17 @@ plot(csiass,hgv,'--r');
 text(0.62,1000,'Temp GV','Fontsize',9);
 hold on
 plot([csi8 csi8],[h8 -500],'-.k');
-text(csi8,-550,'\xi','Fontsize',12);
+text(csi8,-575,'\xi_P','Fontsize',12,'horizontalalignment','center');
 hold on
 plot([csi5 csi5],[h6pR -500],'-.k');
-text(csi8,-550,'\xi','Fontsize',12);
+text(csi5,-575,'\xi_R','Fontsize',12,'horizontalalignment','center');
 hold on
 plot([csi1 csi1],[h1 -500],'-.k');
-text(csi1,-550,'\xi','Fontsize',12);
+text(csi1,-575,'\xi_V','Fontsize',12,'horizontalalignment','center');
 grid on
 title('Schema');
-xlabel('\xi','fontsize',15);
-ylabel('Entalpia [kJ/kg]','fontsize',15);
+xlabel('\xi','fontsize',20,'fontWeight','bold');
+ylabel('Entalpia [kJ/kg]','fontsize',20,'fontWeight','bold');
 
 
 %% PLOT GRAFICO csi-P
