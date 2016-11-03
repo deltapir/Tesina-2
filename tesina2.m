@@ -151,7 +151,7 @@ for i=1:length(p3var);
 %     plot(csi,T5var);
 %     hold on
 end
-figure('P-COP')           %plotto il grafico P-COP
+figure(2)           %plotto il grafico P-COP
 plot(p3var,COPvar);
 xlabel('P [bar]');
 ylabel('COP');
@@ -183,47 +183,7 @@ Qass=-m5*h5R+m4*h4R+m7*h8;
 Qco=m4*(h1-h2);
 Qgv=m4*h1+m7*h8-m5*h6R;
 
-%% DISEGNO GRAFICO
-for i=1:length(csi)
-    HVCO(i)=refpropm('h','p',p1*100,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/1000;
-    HLCO(i)=refpropm('h','p',p1*100,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/1000;
-    HVEV(i)=refpropm('h','p',p3*100,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/1000;
-    HLEV(i)=refpropm('h','p',p3*100,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/1000;
-end
-csiboh=0.97;
-% [liq vap]=refpropm('x','t',Tass+273.15,'q',1,'ammonia','water');
-hliq=refpropm('h','p',p3*100,'q',1,'ammonia','water',[csiboh 1-csiboh])/1000;
-figure('Schema')
-plot(csi,HVCO,'r',csi,HLCO,'r');
-text([0.5 0.5],[HVCO(length(csi)/2) HLCO(length(csi)/2)],'CO','color','red','Fontsize',14);
-hold on
-plot(csi,HVEV,'b',csi,HLEV,'b');
-text([0.25 0.25],[HVEV(length(csi)/4)-100 HLEV(length(csi)/4)],'EV','color','blue','Fontsize',14);
-hold on
-plot(csi1,h1,'ko');
-text(csi1+0.01,h1+50,'1','Fontsize',10);
-hold on
-plot(csi1,h2,'ko');
-text(csi1+0.01,h2+50,'2\equiv 3','Fontsize',10);
-hold on
-plot(csi1,h4R,'ko');
-text(csi1+0.01,h4R+50,'4','Fontsize',10);
-hold on
-plot(csi8,h8,'ko');
-text(csi8+0.01,h8+50,'7\equiv 8','Fontsize',10);
-hold on
-plot(csi5,h5R,'ko');
-text(csi5+0.01,h5R+50,'5\equiv 6','Fontsize',10);
-hold on
-plot([csi8 csi1],[h8 h1],'--r');
-text(0.6,1000,'Temp GV','Fontsize',8);
-hold on
-plot([csi5 csiboh],[h5R hliq-50],'--g');
-text(0.75,1000,'Temp ASS','Fontsize',8);
-grid on
-title('Schema');
-xlabel('\xi');
-ylabel('Entalpia [kJ/kg]');
+
 
 
 %% SCAMBIATORE
@@ -237,6 +197,83 @@ Qgvp=m4*h1+m7*h8-m5*h6pR;
 COPp=Qev/Qgvp;
 % con lo scambiatore sia il calore all'assorbitore che quello al generatore
 % sono diminuiti. Ne consegue un aumento del COP.
+
+%% DISEGNO GRAFICO
+for i=1:length(csi)
+    HVCO(i)=refpropm('h','p',p1*100,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+    HLCO(i)=refpropm('h','p',p1*100,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+    HVEV(i)=refpropm('h','p',p3*100,'q',1,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+    HLEV(i)=refpropm('h','p',p3*100,'q',0,'ammonia','water',[csi(i) 1-csi(i)])/1000;
+end
+csiv=linspace(0.1,1,20);
+for i=1:length(csiv)
+    hev(i)=refpropm('h','t',Tev+273.15,'p',p3*100,'ammonia','water',[csiv(i) 1-csiv(i)])/1000;
+end
+csiass=linspace(0.,1,20);
+for i=1:length(csiass)
+    hass(i)=refpropm('h','t',Tass+273.15,'p',p3*100,'ammonia','water',[csiass(i) 1-csiass(i)])/1000;
+end
+for i=1:length(csiass)
+    hco(i)=refpropm('h','t',Tco+273.15,'p',p1*100,'ammonia','water',[csiass(i) 1-csiass(i)])/1000;
+end
+for i=1:length(csiass)
+    hgv(i)=refpropm('h','t',Tge+273.15,'p',p1*100,'ammonia','water',[csiass(i) 1-csiass(i)])/1000;
+end
+csiboh=0.97;
+% [liq vap]=refpropm('x','t',Tass+273.15,'q',1,'ammonia','water');
+hliq=refpropm('h','p',p3*100,'q',1,'ammonia','water',[csiboh 1-csiboh])/1000;
+figure(1)
+plot(csi,HVCO,'r',csi,HLCO,'r','linewidth',1);
+text([0.5 0.5],[HVCO(length(csi)/2) HLCO(length(csi)/2)],'CO','color','red','Fontsize',14);
+hold on
+plot(csi,HVEV,'b',csi,HLEV,'b','linewidth',1);
+text([0.25 0.25],[HVEV(length(csi)/4)-100 HLEV(length(csi)/4)],'EV','color','blue','Fontsize',14);
+hold on
+plot(csi1,h1,'ko');
+text(csi1+0.01,h1+50,'1','Fontsize',12,'fontWeight','bold');
+hold on
+plot(csi1,h2,'ko');
+text(csi1+0.01,h2+50,'2\equiv3','Fontsize',12,'fontWeight','bold');
+hold on
+plot(csi1,h4R,'ko');
+text(csi1+0.01,h4R+50,'4','Fontsize',12,'fontWeight','bold');
+hold on
+plot(csi8,h8,'ko');
+text(csi8+0.01,h8+50,'7\equiv8','Fontsize',12,'fontWeight','bold');
+hold on
+plot(csi5,h5R,'ko');
+text(csi5+0.01,h5R+50,'5\equiv6','Fontsize',12,'fontWeight','bold');
+hold on
+plot(csi8,h8pR,'ko');
+text(csi8+0.01,h8pR+50,'8p','Fontsize',12,'fontWeight','bold');
+hold on
+plot(csi5,h6pR,'ko');
+text(csi5+0.01,h6pR+50,'6p','Fontsize',12,'fontWeight','bold');
+hold on
+plot(csiv,hev,'--b');
+text(0.9,1000,'Temp EV','Fontsize',9);
+hold on
+plot(csiass,hass,'--g');
+text(0.75,1000,'Temp ASS','Fontsize',9);
+hold on
+plot(csiass,hco,'--k');
+text(0.96,1000,'Temp CO','Fontsize',9);
+hold on
+plot(csiass,hgv,'--r');
+text(0.62,1000,'Temp GV','Fontsize',9);
+hold on
+plot([csi8 csi8],[h8 -500],'-.k');
+text(csi8,-575,'\xi_P','Fontsize',12,'horizontalalignment','center');
+hold on
+plot([csi5 csi5],[h6pR -500],'-.k');
+text(csi5,-575,'\xi_R','Fontsize',12,'horizontalalignment','center');
+hold on
+plot([csi1 csi1],[h1 -500],'-.k');
+text(csi1,-575,'\xi_V','Fontsize',12,'horizontalalignment','center');
+grid on
+title('Schema');
+xlabel('\xi','fontsize',20,'fontWeight','bold');
+ylabel('Entalpia [kJ/kg]','fontsize',20,'fontWeight','bold');
 
 
 %% PLOT GRAFICO csi-P
