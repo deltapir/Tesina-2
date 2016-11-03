@@ -152,10 +152,7 @@ for i=1:length(p3var);
 %     hold on
 end
 figure(2)
-plot(p3var,COPvar);
-xlabel('P [bar]');
-ylabel('COP');
-title('Pressione - COP');
+
 %   calcolo il COP massimo
 [COP, p3]=max(COPvar);
 fR=f(p3);       %mi prendo il valore di ricircolo corrispondente al cop massimo R:reale
