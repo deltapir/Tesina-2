@@ -151,7 +151,12 @@ for i=1:length(p3var);
 %     plot(csi,T5var);
 %     hold on
 end
-figure(2)
+figure(2)           %plotto il grafico P-COP
+plot(p3var,COPvar);
+xlabel('P [bar]');
+ylabel('COP');
+title('Pressione - COP');
+grid on
 
 %   calcolo il COP massimo
 [COP, p3]=max(COPvar);
@@ -174,6 +179,9 @@ m7=m4*(csi1-csi5)/(csi5-csi8);
 m5=m4+m7;
 h6R=h5R; %sii trascura l'incremento entalpico fornito dalla pompa
 T6R=refpropm('t','h',h6R*1000,'p',p1*100,'ammonia','water',[csi5 1-csi5])-273.15;
+Qass=-m5*h5R+m4*h4R+m7*h8;
+Qco=m4*(h1-h2);
+Qgv=m4*h1+m7*h8-m5*h6R;
 
 %% DISEGNO GRAFICO
 for i=1:length(csi)
@@ -216,6 +224,17 @@ grid on
 title('Schema');
 xlabel('\xi');
 ylabel('Entalpia [kJ/kg]');
+
+
+%% SCAMBIATORE
+% del punto 8' a valle del rigeneratore conosco pressione, temperatura (che
+% per ipotesi è uguale a 6 e la concentrazione. Calcolo l'entalpia.
+h8pR=refpropm('h','t',T6R+273.15,'p',p1*100,'ammonia','water',[csi8 1-csi8])/1000;
+h6pR=((f-1)/f)*(h8-h8pR)+h6R;
+
+Qassp=m5*h5R+m4*h4R+m7*h8;
+
+
 
 
 %% PLOT GRAFICO csi-P
