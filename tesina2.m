@@ -144,6 +144,7 @@ for i=1:length(p3var);
     %calcolo hq alla temperatura del GV con la concentrazione ricca
     hq(i)=refpropm('h','t',Tge+273.15,'p',p3var(i)*100,'ammonia','water',[csi8 1-csi8])/1000;
     qGV(i)=f(i)*(hq(i)-h5(i));
+    m4p(i)=Qev/(h4(i)-h2);
     %CALCOLO COOOOOOOOOOOOOOOOOOOOOOOOOOOOOOP!
     COPvar(i)=(h4(i)-h2)/(qGV(i));
 %     COPvar(i)=((h4(i)-h2)/(h1-h8+f(i)*(h8-h5(i)))); %usando questa
@@ -151,8 +152,14 @@ for i=1:length(p3var);
 %     plot(csi,T5var);
 %     hold on
 end
+%   calcolo il COP massimo
+[COP, p3]=max(COPvar);
+fR=f(p3);       %mi prendo il valore di ricircolo corrispondente al cop massimo R:reale
+p3=p3var(p3);   %determino il valore della p3 corrispondente al cop massimo
+csi5=(csi1-csi8)/fR+csi8;
+
 figure(2)           %plotto il grafico P-COP
-plot(p3var,COPvar,'k');
+plot(p3var,COPvar,'k','linewidth',2);
 hold on
 plot([p3 1],[COP COP],'-.k');
 text(p3/2,COP+0.01,'COP massimo','horizontalalignment','center','fontweight','bold');
@@ -166,12 +173,6 @@ xlabel('Pressione [bar]');
 ylabel('COP');
 title('Pressione - COP');
 grid on
-
-%   calcolo il COP massimo
-[COP, p3]=max(COPvar);
-fR=f(p3);       %mi prendo il valore di ricircolo corrispondente al cop massimo R:reale
-p3=p3var(p3);   %determino il valore della p3 corrispondente al cop massimo
-csi5=(csi1-csi8)/fR+csi8;
 
 %ricalcolo a questo punto le varie proprietà visto che ho ottenuto la
 %pressione all'evaporatore. R:reale
@@ -198,9 +199,16 @@ Qgv=m4*h1+m7*h8-m5*h6R;
 %% SCAMBIATORE
 % del punto 8' a valle del rigeneratore conosco pressione, temperatura (che
 % per ipotesi è uguale a 6 e la concentrazione. Calcolo l'entalpia.
+
 h8pR=refpropm('h','t',T6R+273.15,'p',p1*100,'ammonia','water',[csi8 1-csi8])/1000;
 h6pR=((f-1)/f)*(h8-h8pR)+h6R;
 
+%calcolo il cop con scambiatore al variare della pressione EV. Siccome non
+%variano le concentrazioni nei 3 rami, la f (frazione di ricircolo) sarà
+%invariata. Anche il range di pressione ammissibile all'evaporatore sarà
+%invariato perchè i punti 3 e 5 non risentono della presenza o meno
+%dell'evaporatore. 
+% for i=1:length(p3var);
 Qassp=-m5*h5R+m4*h4R+m7*h8pR;
 Qgvp=m4*h1+m7*h8-m5*h6pR;
 COPp=Qev/Qgvp;
